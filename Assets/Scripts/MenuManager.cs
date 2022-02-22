@@ -14,10 +14,13 @@ public class MenuManager : MonoBehaviour
     private void Start()
     {
         GameObject.Find("edPlayerName").GetComponent<InputField>().text = SaveData.Instance.dataStore.lastPlayerName;
-        if (SaveData.Instance.dataStore.bestPlayer.score > 0)
-            txtBestScore.text = $"Best Score : {SaveData.Instance.dataStore.bestPlayer.name} : {SaveData.Instance.dataStore.bestPlayer.score}";
+        for (int i = 0; i < SaveData.Instance.dataStore.bestPlayers.Length; i++)
+        {
+            if (SaveData.Instance.dataStore.bestPlayers[i].score > 0)
+                GameObject.Find("txtScore" + i).GetComponent<Text>().text = $"{SaveData.Instance.dataStore.bestPlayers[i].name} : {SaveData.Instance.dataStore.bestPlayers[i].score}";
+        }
     }
-    
+
     public void StartNew()
     {
         SaveData.Instance.dataStore.lastPlayerName = GameObject.Find("edPlayerName").GetComponent<InputField>().text;

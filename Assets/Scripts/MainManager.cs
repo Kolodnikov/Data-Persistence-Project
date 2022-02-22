@@ -23,7 +23,7 @@ public class MainManager : MonoBehaviour
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         score = 0;
-        txtBestScore.text = $"Best Score : {SaveData.Instance.dataStore.bestPlayer.name} : {SaveData.Instance.dataStore.bestPlayer.score}";
+        txtBestScore.text = $"Best Score : {SaveData.Instance.dataStore.bestPlayers[0].name} : {SaveData.Instance.dataStore.bestPlayers[0].score}";
 
         int[] pointCountArray = new[] { 1, 1, 2, 2, 5, 5 };
         for (int i = 0; i < LineCount; ++i)
@@ -70,10 +70,12 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
-        if (score > SaveData.Instance.dataStore.bestPlayer.score)
+        int lastIndex = SaveData.Instance.dataStore.bestPlayers.Length-1;
+        if (score > SaveData.Instance.dataStore.bestPlayers[lastIndex].score)
         {
-            SaveData.Instance.dataStore.bestPlayer.score = score;
-            SaveData.Instance.dataStore.bestPlayer.name = SaveData.Instance.dataStore.lastPlayerName;
+            SaveData.Instance.dataStore.bestPlayers[lastIndex].score = score;
+            SaveData.Instance.dataStore.bestPlayers[lastIndex].name = SaveData.Instance.dataStore.lastPlayerName;
+            SaveData.Instance.SortScore();
             SaveData.Instance.SaveScore();
         }
         isGameOver = true;

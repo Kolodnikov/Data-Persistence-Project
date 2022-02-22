@@ -14,7 +14,7 @@ public class SaveData : MonoBehaviour
     [System.Serializable]
     public class DataStore
     {
-        public PlayerData bestPlayer;
+        public PlayerData[] bestPlayers;
         public string lastPlayerName;
     }
 
@@ -36,6 +36,7 @@ public class SaveData : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         path = Application.persistentDataPath;
         dataStore = new DataStore();
+        dataStore.bestPlayers = new PlayerData[5];
         LoadScore();
     }
 
@@ -51,6 +52,29 @@ public class SaveData : MonoBehaviour
         {
             string json = File.ReadAllText(path + fileName);
             dataStore = JsonUtility.FromJson<DataStore>(json);
+        }
+    }
+
+    public void SortScore()
+    {
+        int k, i, j;
+        PlayerData data;
+        for (i = 0; i < dataStore.bestPlayers.Length - 1; i++)
+        {
+            k = i;
+            for (j = i + 1; j < dataStore.bestPlayers.Length; j++)
+            {
+                if (dataStore.bestPlayers[j].score > dataStore.bestPlayers[k].score)
+                {
+                    k = j;
+                }
+            }
+            if (k != i)
+            {
+                data = dataStore.bestPlayers[k];
+                dataStore.bestPlayers[k] = dataStore.bestPlayers[i];
+                dataStore.bestPlayers[i] = data;
+            }
         }
     }
 }
